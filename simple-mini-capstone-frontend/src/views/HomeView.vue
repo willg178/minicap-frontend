@@ -1,11 +1,38 @@
+<template>
+  <div class="home">
+    <h1>{{ message }}</h1>
+
+    <div>
+      <div>Name: <input type="text" v-model="newRecipeParams.name" /></div>
+      <div>Price: <input type="text" v-model="newRecipeParams.price" /></div>
+      <div>
+        Description: <input type="text" v-model="newRecipeParams.description" />
+      </div>
+      <div>
+        Image_url: <input type="text" v-model="newRecipeParams.image_url" />
+      </div>
+      <button v-on:click="createProducts">CREATE</button>
+    </div>
+
+    <div v-for="product in products" :key="product.id">
+      <h2>{{ product.id }}</h2>
+      <h1>{{ product.name }}</h1>
+      <img :src="product.image_url" :alt="product.title" />
+      <body>
+        {{ product.description }}
+      </body>
+    </div>
+  </div>
+</template>
+
 <script>
 import axios from "axios";
-
 export default {
   data: function () {
     return {
-      message: "Welcome to The Store!",
+      message: "STOOOOOOOORE",
       products: [],
+      newRecipeParams: {},
     };
   },
   created: function () {
@@ -18,20 +45,13 @@ export default {
         console.log("All products", this.products);
       });
     },
-    createProduct: function () {
-      console.log("Making a new product!");
-
-      var params = {
-        name: "example name",
-        description: "example description",
-        price: "example price",
-        image_url: "example image_url",
-      };
+    createProducts: function () {
+      console.log("MAKE ONE");
       axios
-        .post("http://localhost:3000/products.json", params)
+        .post("http://localhost:3000/products.json", this.newRecipeParams)
         .then((response) => {
-          console.log("Success", response.data);
-          this.recipes.push(response.data);
+          console.log("GREAT SUCCESS", response.data);
+          this.products.push(response.data);
         })
         .catch((error) => console.log(error.response));
     },
@@ -39,30 +59,8 @@ export default {
 };
 </script>
 
-<template>
-  <div class="home">
-    <h1>{{ message }}</h1>
-    <h2>New Product!</h2>
-    <div>
-      <div>
-        name:
-        <input type="text" v-model="newProductParams.name" />
-        description:
-        <input type="text" v-model="newProductParams.description" />
-        price:
-        <input type="text" v-model="newProductParams.price" />
-        image_url:
-        <input type="text" v-model="newProductParams.image_url" />
-      </div>
-    </div>
-
-    <button v-on:click="createProduct()">Create</button>
-    <div v-for="product in products" v-bind:key="product.id">
-      <h2>Name: {{ product.name }}</h2>
-      <img :src="product.image_url" />
-      <p>Description: {{ product.description }}</p>
-    </div>
-  </div>
-</template>
-
-<style></style>
+<style>
+img {
+  width: 250px;
+}
+</style>
